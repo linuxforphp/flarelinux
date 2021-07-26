@@ -1,0 +1,51 @@
+{
+    "name": "linuxforphp/linuxforcomposer",
+    "description": "A Composer interface to run 'Linux for PHP' Docker containers, Dockerfiles or docker-compose files.",
+    "single": {
+        "image": {
+            "dockerfile": {
+                "url": "Dockerfile",
+                "container-name": "my_flare_server",
+                "username": "",
+                "token": ""
+            }
+        },
+        "containers": {
+            "modes": {
+                "mode1": "detached",
+                "mode2": "interactive",
+                "mode3": "tty"
+            },
+            "ports": {
+                "port1": [
+                    "9650:9650"
+                ],
+                "port2": [
+                    "9651:9651"
+                ]
+            },
+            "volumes": {
+                "volume1": "${PWD}/:/srv/flarelinux"
+            },
+            "persist-data": {
+                "mount": "false",
+                "root-name": "",
+                "directories": {
+                    "directory1": "",
+                    "directory2": "",
+                    "directory3": ""
+                }
+            }
+        }
+    },
+    "docker-compose": {
+        "url": "",
+        "username": "",
+        "token": ""
+    },
+    "lfphp-cloud": {
+        "account": "",
+        "username": "",
+        "token": ""
+    }
+}

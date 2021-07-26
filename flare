@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+export GOGC=90
+source /etc/bashrc
+export FLARE_HOME="/home/flare"
+cd $FLARE_HOME
+if [[ ! -z "$2" ]]; then
+  export FLARECOMMIT="$2"
+else
+  #CURRENT COMMIT #43335956
+  export FLARECOMMIT='d00ed147e4bca7b2e3054d98c534f0a47bcd606f'
+fi
+git pull origin master
+git checkout "$FLARECOMMIT"
+if [[ -d "cmd" ]]; then
+    export FLARE_BIN_PREFIX="/cmd"
+else
+    export FLARE_BIN_PREFIX=""
+fi
+if [[ "$1" == "--coston" && -f "$FLARE_HOME"/coston.sh ]]; then
+    "$FLARE_HOME"/coston.sh
+else
+    if [[ -f "$FLARE_HOME"/compile.sh ]]; then
+        sed -i 's/sudo //g' "$FLARE_HOME"/compile.sh
+        sed -i 's/sudo //g' "$FLARE_HOME"/src/avalanchego/build_coreth.sh
+        "$FLARE_HOME"/compile.sh
+    fi
+    
+    if [[ "$1" == "--existing" ]]; then
+      "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh --existing
+    elif [[ "$1" == "--single" && -f "$FLARE_HOME""$FLARE_BIN_PREFIX"/single.sh ]]; then
+        "$FLARE_HOME""$FLARE_BIN_PREFIX"/single.sh
+    else
+      "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh
+    fi
+fi
