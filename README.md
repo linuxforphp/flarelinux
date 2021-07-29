@@ -3,7 +3,11 @@
 
 The official Flare Linux repository.
 
-## Project Setup
+https://flarelinux.xyz
+
+Flare Linux is a lightweight version of Linux to run Flare Networks server nodes.
+
+## Build the Flare Linux image
 
 You must have `docker` and `docker-compose` installed on your computer.
 
@@ -14,6 +18,8 @@ git clone https://github.com/linuxforphp/flarelinux.git
 cd flarelinux
 ./build
 ```
+
+## Run the Flare Linux image
 
 You will then be able to start testing the new image. To start a container, run the following command:
 
