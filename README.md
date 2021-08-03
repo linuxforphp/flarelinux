@@ -34,26 +34,27 @@ docker-compose up -d --build
 To stop the container once you are done with it, please type the following command:
 
 ```
-docker-compose down
+docker-compose down -v
 ```
 
 ### Option 2 - Linux for Composer (build the image and run a container)
 
-If you have `Linux for Composer` (https://packagist.org/packages/linuxforphp/linuxforcomposer) on your computer, you can build the image, and start the container with the following command:
+If you have `composer` and `linuxforcomposer` (https://packagist.org/packages/linuxforphp/linuxforcomposer) on your computer, you can build the image, and start the container with the following command:
 
 ```
-linuxforcomposer docker:run start
+composer require linuxforphp/linuxforcomposer
+vendor/bin/linuxforcomposer.phar docker:run start
 ```
 
 To stop the container, simply enter the following command:
 
 ```
-linuxforcomposer docker:run stop-force
+vendor/bin/linuxforcomposer.phar docker:run stop-force
 ```
 
 ### Option 3 - Build manually (build the image only)
 
-To build the main Docker image without `docker-compose` or `Linux for Composer`, please run the main `build.sh` script.
+To build the main Docker image without `docker-compose` or `linuxforcomposer`, please run the main `build.sh` script.
 
 ```
 ./build.sh
