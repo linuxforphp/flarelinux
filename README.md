@@ -1,35 +1,45 @@
 # [![Flare Linux Banner](tools/logo.png)](https://flarelinux.xyz/)
 # Flare Linux Docker Images
 
-The official Flare Linux repository.
+The Official Flare Linux Repository.
 
-https://flarelinux.xyz
+Website: https://flarelinux.xyz
 
 Flare Linux is a lightweight version of Linux to run Flare Networks server nodes.
 
-## Build the Flare Linux image
+## Getting Started
 
-You must have `docker` and `docker-compose` installed on your computer.
-
-To build the main Docker image, please run the main `build.sh` script.
+To begin with, you will need to clone the repository and change your current directory
+to the newly cloned project on your computer, like so:
 
 ```
 git clone https://github.com/linuxforphp/flarelinux.git
 cd flarelinux
-./build
 ```
 
-## Run the Flare Linux image
+## Build the Flare Linux image
 
-You will then be able to start testing the new image. To start a container, run the following command:
+In order to build the image, you must first have `docker` on your computer (https://www.docker.com/get-started).
+
+Then, you have many options to build the Flare Linux image:
+
+### Option 1 - Docker Compose (build the image and run a container)
+
+If you have `docker-compose` installed on your computer, please enter the following command:
 
 ```
-docker run -it --rm -p 9650:9650 -p 9651:9651 --name my_flare_server localhost:5000/flarelinux:1.0.0 flare
+docker-compose up -d --build
 ```
 
-You can stop the container by typing the `Ctrl+C` keys on your keyboard, or by stopping and removing the Docker container with the `docker stop my_flare_server` and `docker rm my_flare_server` commands.
+To stop the container once you are done with it, please type the following command:
 
-If you have `Linux for Composer` (https://github.com/linuxforphp/linuxforcomposer) on your computer, you can start the container with the following command:
+```
+docker-compose down
+```
+
+### Option 2 - Linux for Composer (build the image and run a container)
+
+If you have `Linux for Composer` (https://packagist.org/packages/linuxforphp/linuxforcomposer) on your computer, you can build the image, and start the container with the following command:
 
 ```
 linuxforcomposer docker:run start
@@ -40,5 +50,25 @@ To stop the container, simply enter the following command:
 ```
 linuxforcomposer docker:run stop-force
 ```
+
+### Option 3 - Build manually (build the image only)
+
+To build the main Docker image without `docker-compose` or `Linux for Composer`, please run the main `build.sh` script.
+
+```
+./build.sh
+```
+
+## Run the Flare Linux image manually (run a container only)
+
+If you have built the Flare Linux image using one of the previous options,
+you will then be able to start testing the new image. To start a container only,
+run the following command:
+
+```
+docker run -it --rm -p 9650:9650 -p 9651:9651 --name my_flare_server localhost:5000/flarelinux:1.0.0 flare
+```
+
+You can stop the container by typing the `Ctrl+C` keys on your keyboard, or by stopping the Docker container with the `docker stop my_flare_server` command.
 
 Have a lot of fun! :)
