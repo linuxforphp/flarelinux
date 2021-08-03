@@ -1,0 +1,13 @@
+version: '3'
+services:
+  flarelinux:
+    container_name: my_flare_server
+    image: asclinux/flarelinux:1.0.0-rc1
+    restart: always
+    ports:
+      - 9650:9650
+      - 9651:9651
+    volumes:
+      - ${PWD}/:/srv/flarelinux
+    build: ./flarelinux-image
+    command: flare --coston

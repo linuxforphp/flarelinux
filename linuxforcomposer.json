@@ -4,7 +4,7 @@
     "single": {
         "image": {
             "dockerfile": {
-                "url": "Dockerfile",
+                "url": "flarelinux-image/Dockerfile",
                 "container-name": "my_flare_server",
                 "username": "",
                 "token": ""
