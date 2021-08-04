@@ -4,7 +4,7 @@
     "single": {
         "image": {
             "dockerfile": {
-                "url": "flarelinux-image/Dockerfile",
+                "url": "Dockerfile",
                 "container-name": "my_flare_server",
                 "username": "",
                 "token": ""
@@ -22,10 +22,19 @@
                 ],
                 "port2": [
                     "9651:9651"
+                ],
+                "port3": [
+                    "9652:9652"
+                ],
+                "port4": [
+                    "9654:9654"
+                ],
+                "port4": [
+                    "9656:9656"
                 ]
             },
             "volumes": {
-                "volume1": "${PWD}/:/srv/flarelinux"
+                "volume1": "${PWD}/:/srv/flarelinux-image"
             },
             "persist-data": {
                 "mount": "false",
