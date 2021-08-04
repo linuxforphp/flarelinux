@@ -42,6 +42,7 @@ docker-compose down -v
 If you have `composer` and `linuxforcomposer` (https://packagist.org/packages/linuxforphp/linuxforcomposer) on your computer, you can build the image, and start the container with the following command:
 
 ```
+cd flarelinux-image
 composer require linuxforphp/linuxforcomposer
 vendor/bin/linuxforcomposer.phar docker:run start
 ```
@@ -63,7 +64,7 @@ To build the main Docker image without `docker-compose` or `linuxforcomposer`, p
 ## Run the Flare Linux image manually (run a container only)
 
 If you have built the Flare Linux image using one of the previous options,
-you will then be able to start testing the new image. To start a container only,
+you can also start testing the new image manually. To start a container only,
 run the following command:
 
 ```
