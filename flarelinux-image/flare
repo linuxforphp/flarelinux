@@ -2,12 +2,13 @@
 export GOGC=90
 source /etc/bashrc
 export FLARE_HOME="/home/flare"
+export ETH0_IP="$( ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1 )"
 cd $FLARE_HOME
 if [[ ! -z "$2" ]]; then
-  export FLARECOMMIT="$2"
+    export FLARECOMMIT="$2"
 else
-  #CURRENT COMMIT #43335956
-  export FLARECOMMIT='d00ed147e4bca7b2e3054d98c534f0a47bcd606f'
+    #CURRENT COMMIT #43335956
+    export FLARECOMMIT='d00ed147e4bca7b2e3054d98c534f0a47bcd606f'
 fi
 git pull origin master
 git checkout "$FLARECOMMIT"
@@ -25,11 +26,17 @@ else
         "$FLARE_HOME"/compile.sh
     fi
     
-    if [[ "$1" == "--existing" ]]; then
-      "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh --existing
-    elif [[ "$1" == "--single" && -f "$FLARE_HOME""$FLARE_BIN_PREFIX"/single.sh ]]; then
+    if [[ "$1" == "--single" && -f "$FLARE_HOME""$FLARE_BIN_PREFIX"/single.sh ]]; then
+        sed -i "s/127.0.0.1/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/single.sh
         "$FLARE_HOME""$FLARE_BIN_PREFIX"/single.sh
+    elif [[ ! -f "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh ]]; then
+        echo "ERROR: We could not start the Flare server node... Exiting."
+        exit 1
+    elif [[ "$1" == "--existing" ]]; then
+        sed -i "s/127.0.0.1/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh
+        "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh --existing
     else
-      "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh
+        sed -i "s/127.0.0.1/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh
+        "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh
     fi
 fi
