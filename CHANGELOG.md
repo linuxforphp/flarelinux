@@ -1,5 +1,5 @@
 # CHANGELOG
 
-## 1.0.0 (2021-07-26)
+## 1.0.0 (XXXX-XX-XX)
 
 - Initial release.
