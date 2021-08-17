@@ -1,3 +1,6 @@
 # IDEs
 .idea/
 .project/
+
+#Qt Configuration files
+*.pro.user
