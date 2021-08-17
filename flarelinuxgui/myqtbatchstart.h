@@ -25,7 +25,7 @@ private:
 
     QDir *pCwdPath;
 
-    QString batchFileFullPath;
+    QString scriptFileFullPath;
 
 signals:
     void sigStdOutToPost(QByteArray);

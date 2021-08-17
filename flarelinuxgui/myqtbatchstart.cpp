@@ -12,26 +12,26 @@ void myQtBatchStart::startProcess(int option) {
 #ifdef Q_OS_WIN
 
     if (option == 1) {
-        batchFileFullPath = pCwdPath->absoluteFilePath("flarelinux-server_docker-start.bat");
+        scriptFileFullPath = pCwdPath->absoluteFilePath("flarelinux-server_docker-start.bat");
     } else {
-        batchFileFullPath = pCwdPath->absoluteFilePath("flarelinux-server_docker-stop.bat");
+        scriptFileFullPath = pCwdPath->absoluteFilePath("flarelinux-server_docker-stop.bat");
     }
 
-    batchFileFullPath = QDir::toNativeSeparators(batchFileFullPath);
+    scriptFileFullPath = QDir::toNativeSeparators(scriptFileFullPath);
 
-    this->start("cmd.exe", QStringList() << "/c" << batchFileFullPath);
+    this->start("cmd.exe", QStringList() << "/c" << scriptFileFullPath);
 
 #else
 
     if (option == 1) {
-        batchFileFullPath = pCwdPath->absoluteFilePath("flarelinux-server_docker-start.sh");
+        scriptFileFullPath = pCwdPath->absoluteFilePath("flarelinux-server_docker-start.bash");
     } else {
-        batchFileFullPath = pCwdPath->absoluteFilePath("flarelinux-server_docker-stop.sh");
+        scriptFileFullPath = pCwdPath->absoluteFilePath("flarelinux-server_docker-stop.bash");
     }
 
-    batchFileFullPath = QDir::toNativeSeparators(batchFileFullPath);
+    scriptFileFullPath = QDir::toNativeSeparators(scriptFileFullPath);
 
-    this->start("bash", QStringList() << batchFileFullPath);
+    this->start("bash", QStringList() << scriptFileFullPath);
 
 #endif
 

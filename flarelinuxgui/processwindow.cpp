@@ -1,7 +1,7 @@
 #include "processwindow.h"
 
 processWindow::processWindow(int option) : QDialog() {
-    setFixedSize(600, 800);
+    setFixedSize(500, 600);
 
     QPixmap pPm("favicon.png");
     this->setWindowIcon(pPm);
@@ -72,26 +72,21 @@ void processWindow::postStdOutput (QByteArray stdOut) {
     lines = QString(stdOut).split("\n");
 
     foreach (QString line, lines) {
-        if (line[0] == '0') {
+        if (line[0] == '2') {
             this->incrementBar(20);
         }
-        else if (line[0] == '2') {
+        else if (line[0] == '4') {
             this->incrementBar(40);
         }
-        else if (line[0] == '4') {
+        else if (line[0] == '6') {
             this->incrementBar(60);
         }
-        else if (line[0] == '6') {
+        else if (line[0] == '8') {
             this->incrementBar(80);
         }
-        else if (line[0] == '8') {
-            this->incrementBar(99);
-        }
-        else if (line[0] == '1') {
-            this->incrementBar(100);
-        }
         else {
-            pProcessDialogRO->append(line);
+            displayedLine.append(line.trimmed());
+            pProcessDialogRO->setText(displayedLine);
         }
     }
 }

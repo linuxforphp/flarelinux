@@ -47,6 +47,8 @@ private:
     QPushButton *pCancelButton;
 
     QStringList lines;
+
+    QString displayedLine;
     
 signals:
     void sigAbort();

@@ -3,7 +3,7 @@
 mainWindow::mainWindow() : QWidget() {
     initObjects = 0;
 
-    setFixedSize(600, 800);
+    setFixedSize(500, 300);
 
     pVLayout = new QVBoxLayout();
 
@@ -14,11 +14,11 @@ mainWindow::mainWindow() : QWidget() {
     pLabelIcon = new QLabel();
     QPixmap pPm("favicon.png");
     pLabelIcon->setPixmap(pPm);
-    pLabelIcon->setAlignment(Qt::AlignHCenter);
+    pLabelIcon->setAlignment(Qt::AlignLeft);
 
     pLabel = new QLabel("Flare Linux GUI Client");
-    pLabel->setAlignment(Qt::AlignHCenter);
-    pLabel->setFont(QFont("Arial", 12));
+    pLabel->setAlignment(Qt::AlignVCenter);
+    pLabel->setFont(QFont("Arial", 24));
 
     pHLayout->addWidget(pLabelIcon);
     pHLayout->addWidget(pLabel);
@@ -104,6 +104,7 @@ void mainWindow::slMainStartProcessStart() {
     initObjects = 1;
 
     QObject::connect(pMyQtBatchProcess, SIGNAL(readyReadStandardOutput()), pMyQtBatchProcess, SLOT(slReadOutput()));
+    QObject::connect(pMyQtBatchProcess, SIGNAL(readyReadStandardError()), pMyQtBatchProcess, SLOT(slReadOutput()));
     QObject::connect(pMyQtBatchProcess, SIGNAL(sigStdOutToPost(QByteArray)), pProcessProgressWindow, SLOT(slPostStdOutput(QByteArray)));
     QObject::connect(pMyQtBatchProcess, SIGNAL(finished(int)), pProcessProgressWindow, SLOT(slStartDone(int)));
     QObject::connect(this, SIGNAL(sigKill()), pMyQtBatchProcess, SLOT(kill()));
