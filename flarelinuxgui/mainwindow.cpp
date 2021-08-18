@@ -3,7 +3,7 @@
 mainWindow::mainWindow() : QWidget() {
     initObjects = 0;
 
-    setFixedSize(500, 300);
+    setFixedSize(350, 200);
 
     pVLayout = new QVBoxLayout();
 
@@ -14,11 +14,11 @@ mainWindow::mainWindow() : QWidget() {
     pLabelIcon = new QLabel();
     QPixmap pPm("favicon.png");
     pLabelIcon->setPixmap(pPm);
-    pLabelIcon->setAlignment(Qt::AlignLeft);
+    pLabelIcon->setAlignment(Qt::AlignHCenter);
 
     pLabel = new QLabel("Flare Linux GUI Client");
-    pLabel->setAlignment(Qt::AlignVCenter);
-    pLabel->setFont(QFont("Arial", 24));
+    pLabel->setAlignment(Qt::AlignHCenter);
+    pLabel->setFont(QFont("Arial", 12));
 
     pHLayout->addWidget(pLabelIcon);
     pHLayout->addWidget(pLabel);
@@ -45,8 +45,8 @@ mainWindow::mainWindow() : QWidget() {
     pQuitButton->setCursor(Qt::PointingHandCursor);
 
     pCopyright = new QLabel("©2021, Foreach Code Factory. All Rights Reserved.");
-    pCopyright->setAlignment(Qt::AlignHCenter);
-    pCopyright->setFont(QFont("Arial", 8));
+    pCopyright->setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
+    pCopyright->setFont(QFont("Arial", 8, 0, true));
 
     pVLayout->addWidget(pTitle);
     pVLayout->addWidget(pStartButton);
