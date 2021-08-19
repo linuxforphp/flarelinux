@@ -1,6 +1,18 @@
 #include "myqtbatchstart.h"
 
-myQtBatchStart::myQtBatchStart() : QProcess() {}
+myQtBatchStart::myQtBatchStart(int flareMode) : QProcess() {
+    if (flareMode == 1) {
+        this->flareMode = "--local";
+    } else if (flareMode == 2) {
+        this->flareMode = "--existing";
+    } else if (flareMode == 3) {
+        this->flareMode = "--single";
+    } else if (flareMode == 4) {
+        this->flareMode = "--coston";
+    } else {
+        this->flareMode = "--coston";
+    }
+}
 
 myQtBatchStart::~myQtBatchStart() {
     delete pCwdPath;
@@ -19,7 +31,7 @@ void myQtBatchStart::startProcess(int option) {
 
     scriptFileFullPath = QDir::toNativeSeparators(scriptFileFullPath);
 
-    this->start("cmd.exe", QStringList() << "/c" << scriptFileFullPath);
+    this->start("cmd.exe", QStringList() << "/c" << scriptFileFullPath << this->flareMode);
 
 #else
 
@@ -31,7 +43,7 @@ void myQtBatchStart::startProcess(int option) {
 
     scriptFileFullPath = QDir::toNativeSeparators(scriptFileFullPath);
 
-    this->start("bash", QStringList() << scriptFileFullPath);
+    this->start("bash", QStringList() << scriptFileFullPath << this->flareMode);
 
 #endif
 

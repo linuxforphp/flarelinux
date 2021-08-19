@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
-$( docker run -dit --rm -p 9650:9650 --name my_flare_server asclinux/flarelinux:1.0.0-rc1 flare --coston > /dev/null 2>&1 & )
+if [[ -z "$1" ]]; then
+    FLARE_MODE="--coston"
+else
+    FLARE_MODE="$1"
+fi
+
+$( docker run -dit --rm -p 9650:9650 --name my_flare_server asclinux/flarelinux:1.0.0-rc1 flare "$FLARE_MODE" > /dev/null 2>&1 & )
 PID_NUMBER=$( ps aux | grep 9650:9650 | awk '{print $2}' | head -n 1 )
 echo "Docker process started as PID #$PID_NUMBER..."
 DOCKER_CONTAINER_STATUS=$( docker inspect -f "{{.State.Running}}" my_flare_server  2> /dev/null )
@@ -18,7 +24,7 @@ while [[ ! $DOCKER_CONTAINER_STATUS ]]; do
      fi
 
      if ! (( CHECK_COUNT_INCREMENT % 30 )); then
-       if [[ $CHECK_COUNT != 80 ]]; then
+       if [[ $CHECK_COUNT != 100 ]]; then
          CHECK_COUNT=$(( CHECK_COUNT + 20 ));
 
          echo -e $CHECK_COUNT

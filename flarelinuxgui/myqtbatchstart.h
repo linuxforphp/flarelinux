@@ -12,7 +12,7 @@ class myQtBatchStart : public QProcess
     Q_OBJECT
 
 public:
-    myQtBatchStart();
+    myQtBatchStart(int);
 
     ~myQtBatchStart();
 
@@ -26,6 +26,8 @@ private:
     QDir *pCwdPath;
 
     QString scriptFileFullPath;
+
+    QString flareMode;
 
 signals:
     void sigStdOutToPost(QByteArray);

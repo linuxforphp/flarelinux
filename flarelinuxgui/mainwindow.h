@@ -2,10 +2,12 @@
 #define MAINWINDOW_H
 
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QVBoxLayout>
 #include <QPixmap>
 #include <QLabel>
 #include <QWidget>
+#include <QRadioButton>
 #include <QPushButton>
 #include <QByteArray>
 
@@ -23,6 +25,8 @@ public:
 
 private:
 
+    QDesktopWidget dw;
+
     myQtBatchStart *pMyQtBatchProcess;
 
     processWindow *pProcessProgressWindow;
@@ -31,11 +35,27 @@ private:
 
     QHBoxLayout *pHLayout;
 
+    QWidget *pRadioButtons;
+
+    QWidget *pPushButtons;
+
+    QHBoxLayout *pRadioButtonsHLayout;
+
+    QHBoxLayout *pPushButtonsHLayout;
+
     QWidget *pTitle;
 
     QLabel *pLabelIcon;
 
     QLabel *pLabel;
+
+    QRadioButton *pRadioButton1;
+
+    QRadioButton *pRadioButton2;
+
+    QRadioButton *pRadioButton3;
+
+    QRadioButton *pRadioButton4;
 
     QPushButton *pStartButton;
 

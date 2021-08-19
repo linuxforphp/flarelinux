@@ -1,6 +1,7 @@
 #ifndef PROCESSWINDOW_H
 #define PROCESSWINDOW_H
 
+#include <QDesktopWidget>
 #include <QObject>
 #include <QDialog>
 #include <QPixmap>
@@ -30,6 +31,9 @@ public:
 
 
 private:
+
+    QDesktopWidget dw;
+
     QVBoxLayout *pProcessVLayout;
 
     QLabel *pProcessLabel;

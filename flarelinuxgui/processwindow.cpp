@@ -1,7 +1,10 @@
 #include "processwindow.h"
 
 processWindow::processWindow(int option) : QDialog() {
-    setFixedSize(500, 600);
+    int windowX = dw.width() * 0.3;
+    int windowY = dw.height() * 0.5;
+
+    setFixedSize(windowX, windowY);
 
     QPixmap pPm("favicon.png");
     this->setWindowIcon(pPm);
@@ -31,6 +34,7 @@ processWindow::processWindow(int option) : QDialog() {
     pOkButton = new QPushButton("OK");
     pOkButton->setFont(QFont("Arial", 12));
     pOkButton->setCursor(Qt::PointingHandCursor);
+    pOkButton->setMaximumWidth(windowX * 0.2);
     pOkButton->setEnabled(false);
 
     pProcessHLayout->addWidget(pOkButton);
