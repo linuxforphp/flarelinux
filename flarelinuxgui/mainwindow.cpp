@@ -22,7 +22,7 @@ mainWindow::mainWindow() : QWidget() {
 
     pLabel = new QLabel("Flare Linux GUI Client");
     pLabel->setAlignment(Qt::AlignVCenter);
-    pLabel->setFont(QFont("Arial", 24));
+    pLabel->setFont(QFont("Arial", 12));
 
     pHLayout->addWidget(pLabelIcon);
     pHLayout->addWidget(pLabel);
@@ -78,6 +78,8 @@ mainWindow::mainWindow() : QWidget() {
     pCopyright = new QLabel("©2021, Foreach Code Factory. All Rights Reserved.");
     pCopyright->setAlignment(Qt::AlignHCenter);
     pCopyright->setFont(QFont("Arial", 8));
+    pCopyright->setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
+    pCopyright->setFont(QFont("Arial", 8, 0, true));
 
     pVLayout->addWidget(pTitle);
     pVLayout->addWidget(pRadioButtons);
