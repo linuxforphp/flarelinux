@@ -17,14 +17,15 @@ RUN cd && rm which-2.21-lfphp.tar.gz node-v10.24.1-linux-x64.tar.xz
 
 # Golang setup
 RUN lfphp-get golang
-RUN cd && rm go1.15.5.linux-amd64.tar.gz
+RUN cd && rm go1.15.5.linux-amd64-lfphp.tar.gz
 
 # jq setup
 RUN lfphp-get jq
+RUN cd && rm jq-1.6-137-x64-lfphp.tar.gz
 
 # libtirpc and lsof setup
 RUN lfphp-get lsof
-RUN cd && rm libtirpc-1.3.1.tar.bz2 lsof_4.91.tar.gz
+RUN cd && rm libtirpc-1.3.1-lfphp.tar.gz lsof_4.91_src-lfphp.tar.gz
 
 # Flare Network setup
 RUN groupadd flare && useradd -g flare flareuser && cp -rf /etc/skel /home/flareuser && chown -R flareuser:flare /home/flareuser && echo "flareuser:flarepass" | chpasswd
