@@ -8,7 +8,7 @@ if [[ ! -z "$2" ]]; then
     export FLARECOMMIT="$2"
 else
     #CURRENT COMMIT #43335956
-    export FLARECOMMIT='d00ed147e4bca7b2e3054d98c534f0a47bcd606f'
+    export FLARECOMMIT='451710b663bc0ad227463d27c384034fba755e03'
 fi
 git pull origin master
 git checkout "$FLARECOMMIT"
@@ -19,24 +19,39 @@ else
 fi
 if [[ "$1" == "--coston" && -f "$FLARE_HOME"/coston.sh ]]; then
     "$FLARE_HOME"/coston.sh
+elif [[ "$1" == "--songbird" && -f "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh ]]; then
+    #if [[ -f "$FLARE_HOME"/compile.sh ]]; then
+        #sed -i 's/sudo //g' "$FLARE_HOME"/compile.sh
+        #sed -i 's/sudo //g' "$FLARE_HOME"/src/avalanchego/build_coreth.sh
+        #"$FLARE_HOME"/compile.sh songbird
+    #fi
+    
+    sed -i "s/127.0.0.1/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh
+    sed -i "s/127.0.0.2/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh
+    "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh
 else
     if [[ -f "$FLARE_HOME"/compile.sh ]]; then
         sed -i 's/sudo //g' "$FLARE_HOME"/compile.sh
         sed -i 's/sudo //g' "$FLARE_HOME"/src/avalanchego/build_coreth.sh
-        "$FLARE_HOME"/compile.sh
+        "$FLARE_HOME"/compile.sh local
     fi
     
     if [[ "$1" == "--single" && -f "$FLARE_HOME""$FLARE_BIN_PREFIX"/single.sh ]]; then
         sed -i "s/127.0.0.1/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/single.sh
+        sed -i "s/127.0.0.2/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/single.sh
         "$FLARE_HOME""$FLARE_BIN_PREFIX"/single.sh
     elif [[ ! -f "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh ]]; then
         echo "ERROR: We could not start the Flare server node... Exiting."
         exit 1
     elif [[ "$1" == "--existing" ]]; then
         sed -i "s/127.0.0.1/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh
+        sed -i "s/127.0.0.2/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh
         "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh --existing
     else
         sed -i "s/127.0.0.1/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh
+        sed -i "s/127.0.0.2/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh
         "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh
     fi
 fi
+rm -rf /services/*
+runall </dev/null >/dev/null 2>&1
