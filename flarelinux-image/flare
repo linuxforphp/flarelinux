@@ -7,8 +7,8 @@ cd $FLARE_HOME
 if [[ ! -z "$2" ]]; then
     export FLARECOMMIT="$2"
 else
-    #CURRENT COMMIT #43335956
-    export FLARECOMMIT='451710b663bc0ad227463d27c384034fba755e03'
+    #CURRENT COMMIT #a1f141b4562c74fb49e75d3ff91f233deb77c1f0
+    export FLARECOMMIT='a1f141b4562c74fb49e75d3ff91f233deb77c1f0'
 fi
 git pull origin master
 git checkout "$FLARECOMMIT"
@@ -20,14 +20,14 @@ fi
 if [[ "$1" == "--coston" && -f "$FLARE_HOME"/coston.sh ]]; then
     "$FLARE_HOME"/coston.sh
 elif [[ "$1" == "--songbird" && -f "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh ]]; then
-    #if [[ -f "$FLARE_HOME"/compile.sh ]]; then
-        #sed -i 's/sudo //g' "$FLARE_HOME"/compile.sh
-        #sed -i 's/sudo //g' "$FLARE_HOME"/src/avalanchego/build_coreth.sh
-        #"$FLARE_HOME"/compile.sh songbird
-    #fi
+    if [[ ! -z "$2" && -f "$FLARE_HOME"/compile.sh ]]; then
+        sed -i 's/sudo //g' "$FLARE_HOME"/compile.sh
+        sed -i 's/sudo //g' "$FLARE_HOME"/src/avalanchego/build_coreth.sh
+        "$FLARE_HOME"/compile.sh songbird
+    fi
     
-    sed -i "s/127.0.0.1/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh
-    sed -i "s/127.0.0.2/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh
+    sed -i "s/127.0.0.1/0.0.0.0/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh
+    sed -i "s/127.0.0.2/0.0.0.0/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh
     "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh
 else
     if [[ -f "$FLARE_HOME"/compile.sh ]]; then

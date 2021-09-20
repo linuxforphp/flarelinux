@@ -34,7 +34,7 @@ RUN mv /root/go /home
 RUN echo 'export XRP_APIs="https://xrpl.flare.network:443,https://xrpl-1.flare.network:443,https://xrplcluster.com"' >> /etc/bashrc
 RUN cd /home && git clone https://gitlab.com/flarenetwork/flare
 # Checking out last successful build of Coreth (Go module) - CURRENT HEAD is 451710b663bc0ad227463d27c384034fba755e03 (Songbird)
-RUN export GOGC=90 && cd /home/flare && git checkout 451710b663bc0ad227463d27c384034fba755e03 && source /etc/bashrc && sed -i 's/sudo //g' /home/flare/compile.sh && sed -i 's/sudo //g' /home/flare/src/avalanchego/build_coreth.sh && /home/flare/compile.sh songbird && chgrp -R flare /home/go && chmod -R 775 /home/go && chown -R flareuser:flare /home/flare
+RUN export GOGC=90 && cd /home/flare && git checkout a1f141b4562c74fb49e75d3ff91f233deb77c1f0 && source /etc/bashrc && sed -i 's/sudo //g' /home/flare/compile.sh && sed -i 's/sudo //g' /home/flare/src/avalanchego/build_coreth.sh && /home/flare/compile.sh songbird && chown -R flareuser:flare /home/go && chmod -R 775 /home/go && chown -R flareuser:flare /home/flare
 
 COPY ./flare /usr/bin
 
