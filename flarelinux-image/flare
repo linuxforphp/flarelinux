@@ -2,8 +2,7 @@
 export GOGC=90
 source /etc/bashrc
 export FLARE_HOME="/home/flare"
-export ETH0_IP="$( ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1 )"
-cd $FLARE_HOME
+cd $FLARE_HOME || exit 2
 if [[ ! -z "$2" ]]; then
     export FLARECOMMIT="$2"
 else
@@ -17,6 +16,20 @@ if [[ -d "cmd" ]]; then
 else
     export FLARE_BIN_PREFIX=""
 fi
+if [[ -z "$FLARE_BIND_ADDRESS" && "$1" == "--songbird" && -f "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh ]]; then
+    export FLARE_BIND_ADDRESS="0.0.0.0"
+fi
+if [[ -z "$FLARE_BIND_ADDRESS" && "$1" == "--local" ]]; then
+    export FLARE_BIND_ADDRESS="127.0.0.1"
+fi
+if [[ ! -z "$FLARE_BIND_ADDRESS" ]]; then
+    export ETH0_IP="$FLARE_BIND_ADDRESS"
+else
+    export ETH0_IP="$( ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1 )"
+fi
+if [[ ! -z "$FLARE_XRP_APIs" ]]; then
+    export XRP_APIs="$FLARE_XRP_APIs"
+fi
 if [[ "$1" == "--coston" && -f "$FLARE_HOME"/coston.sh ]]; then
     "$FLARE_HOME"/coston.sh
 elif [[ "$1" == "--songbird" && -f "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh ]]; then
@@ -26,8 +39,8 @@ elif [[ "$1" == "--songbird" && -f "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh 
         "$FLARE_HOME"/compile.sh songbird
     fi
     
-    sed -i "s/127.0.0.1/0.0.0.0/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh
-    sed -i "s/127.0.0.2/0.0.0.0/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh
+    sed -i "s/127.0.0.1/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh
+    sed -i "s/127.0.0.2/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh
     "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh
 else
     if [[ -f "$FLARE_HOME"/compile.sh ]]; then
