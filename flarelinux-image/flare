@@ -3,68 +3,83 @@ export GOGC=90
 source /etc/bashrc
 export FLARE_HOME="/home/flare"
 cd $FLARE_HOME || exit 2
+
 if [[ ! -z "$2" ]]; then
-    export FLARECOMMIT="$2"
+  export FLARECOMMIT="$2"
 else
-    #CURRENT COMMIT #a1f141b4562c74fb49e75d3ff91f233deb77c1f0
-    export FLARECOMMIT='a1f141b4562c74fb49e75d3ff91f233deb77c1f0'
+  #CURRENT COMMIT #a1f141b4562c74fb49e75d3ff91f233deb77c1f0
+  export FLARECOMMIT='a1f141b4562c74fb49e75d3ff91f233deb77c1f0'
 fi
+
 git pull origin master
 git checkout "$FLARECOMMIT"
+
 if [[ -d "cmd" ]]; then
-    export FLARE_BIN_PREFIX="/cmd"
+  export FLARE_BIN_PREFIX="/cmd"
 else
-    export FLARE_BIN_PREFIX=""
+  export FLARE_BIN_PREFIX=""
 fi
+
 if [[ -z "$FLARE_BIND_ADDRESS" && "$1" == "--songbird" && -f "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh ]]; then
-    export FLARE_BIND_ADDRESS="0.0.0.0"
+  export FLARE_BIND_ADDRESS="0.0.0.0"
 fi
+
 if [[ -z "$FLARE_BIND_ADDRESS" && "$1" == "--local" ]]; then
-    export FLARE_BIND_ADDRESS="127.0.0.1"
+  export FLARE_BIND_ADDRESS="127.0.0.1"
 fi
+
 if [[ ! -z "$FLARE_BIND_ADDRESS" ]]; then
-    export ETH0_IP="$FLARE_BIND_ADDRESS"
+  export ETH0_IP="$FLARE_BIND_ADDRESS"
 else
-    export ETH0_IP="$( ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1 )"
+  export ETH0_IP="$( ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1 )"
 fi
+
 if [[ ! -z "$FLARE_XRP_APIs" ]]; then
-    export XRP_APIs="$FLARE_XRP_APIs"
+  export XRP_APIs="$FLARE_XRP_APIs"
 fi
-if [[ "$1" == "--coston" && -f "$FLARE_HOME"/coston.sh ]]; then
-    "$FLARE_HOME"/coston.sh
+
+if [[ "$1" == "--coston" && -f "$FLARE_HOME""$FLARE_BIN_PREFIX"/coston.sh ]]; then
+  "$FLARE_HOME""$FLARE_BIN_PREFIX"/coston.sh
 elif [[ "$1" == "--songbird" && -f "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh ]]; then
-    if [[ ! -z "$2" && -f "$FLARE_HOME"/compile.sh ]]; then
-        sed -i 's/sudo //g' "$FLARE_HOME"/compile.sh
-        sed -i 's/sudo //g' "$FLARE_HOME"/src/avalanchego/build_coreth.sh
-        "$FLARE_HOME"/compile.sh songbird
-    fi
-    
-    sed -i "s/127.0.0.1/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh
-    sed -i "s/127.0.0.2/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh
-    "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh
+  if [[ ! -z "$2" && -f "$FLARE_HOME"/compile.sh ]]; then
+    sed -i 's/sudo //g' "$FLARE_HOME"/compile.sh
+    sed -i 's/sudo //g' "$FLARE_HOME"/src/avalanchego/build_coreth.sh
+    "$FLARE_HOME"/compile.sh songbird
+  fi
+
+  sed -i "s/127.0.0.1/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh
+  sed -i "s/127.0.0.2/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh
+  "$FLARE_HOME""$FLARE_BIN_PREFIX"/songbird.sh
 else
+  if [[ "$1" == "--coston" ]]; then
+    git checkout coston
+    sed -i "s/127.0.0.1/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/coston.sh
+    "$FLARE_HOME""$FLARE_BIN_PREFIX"/coston.sh
+  else
     if [[ -f "$FLARE_HOME"/compile.sh ]]; then
-        sed -i 's/sudo //g' "$FLARE_HOME"/compile.sh
-        sed -i 's/sudo //g' "$FLARE_HOME"/src/avalanchego/build_coreth.sh
-        "$FLARE_HOME"/compile.sh local
+      sed -i 's/sudo //g' "$FLARE_HOME"/compile.sh
+      sed -i 's/sudo //g' "$FLARE_HOME"/src/avalanchego/build_coreth.sh
+      "$FLARE_HOME"/compile.sh local
     fi
-    
+
     if [[ "$1" == "--single" && -f "$FLARE_HOME""$FLARE_BIN_PREFIX"/single.sh ]]; then
-        sed -i "s/127.0.0.1/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/single.sh
-        sed -i "s/127.0.0.2/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/single.sh
-        "$FLARE_HOME""$FLARE_BIN_PREFIX"/single.sh
+      sed -i "s/127.0.0.1/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/single.sh
+      sed -i "s/127.0.0.2/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/single.sh
+      "$FLARE_HOME""$FLARE_BIN_PREFIX"/single.sh
     elif [[ ! -f "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh ]]; then
-        echo "ERROR: We could not start the Flare server node... Exiting."
-        exit 1
+      echo "ERROR: We could not start the Flare server node... Exiting."
+      exit 1
     elif [[ "$1" == "--existing" ]]; then
-        sed -i "s/127.0.0.1/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh
-        sed -i "s/127.0.0.2/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh
-        "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh --existing
+      sed -i "s/127.0.0.1/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh
+      sed -i "s/127.0.0.2/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh
+      "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh --existing
     else
-        sed -i "s/127.0.0.1/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh
-        sed -i "s/127.0.0.2/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh
-        "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh
+      sed -i "s/127.0.0.1/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh
+      sed -i "s/127.0.0.2/$ETH0_IP/g" "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh
+      "$FLARE_HOME""$FLARE_BIN_PREFIX"/local.sh
     fi
+  fi
 fi
+
 rm -rf /services/*
 runall </dev/null >/dev/null 2>&1
