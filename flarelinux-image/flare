@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+source /etc/bashrc
+
+export FLARE_HOME="/home/flareuser/flare"
+
+cd $FLARE_HOME || exit 2
+
+#export ROCKSDBALLOWED=1
+
+if [[ -d "build" && -f "$FLARE_HOME"/build/flare ]]; then
+  export FLARE_BIN_PREFIX=/build
+  export FLARE_BIN="$FLARE_HOME""$FLARE_BIN_PREFIX"/flare
+else
+  exit 3
+fi
+
+if [[ -z "$FLARE_BIND_ADDRESS" && ( "$1" == "--coston" || "$1" == "--songbird" ) ]]; then
+  export FLARE_BIND_ADDRESS="0.0.0.0"
+fi
+
+if [[ -z "$FLARE_BIND_ADDRESS" && "$1" == "--local" ]]; then
+  export FLARE_BIND_ADDRESS="127.0.0.1"
+fi
+
+if [[ -n "$FLARE_BIND_ADDRESS" ]]; then
+  export ETH0_IP="$FLARE_BIND_ADDRESS"
+else
+  export ETH0_IP="$( ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1 )"
+fi
+
+if [[ "$1" == "--coston" ]]; then
+  "$FLARE_BIN" --network-id=coston \
+    --bootstrap-ips="$( curl -m 10 -sX POST --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeIP" }' -H 'content-type:application/json;' https://coston.flare.network/ext/info | jq -r ".result.ip" )" \
+    --bootstrap-ids="$( curl -m 10 -sX POST --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' -H 'content-type:application/json;' https://coston.flare.network/ext/info | jq -r ".result.nodeID" )" \
+    --http-host="$ETH0_IP" >/dev/null 2>&1 &
+elif [[ "$1" == "--songbird" ]]; then
+  "$FLARE_BIN" --network-id=songbird \
+  --bootstrap-ips="$( curl -m 10 -sX POST --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeIP" }' -H 'content-type:application/json;' https://songbird.flare.network/ext/info | jq -r ".result.ip" )" \
+  --bootstrap-ids="$( curl -m 10 -sX POST --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' -H 'content-type:application/json;' https://songbird.flare.network/ext/info | jq -r ".result.nodeID" )" \
+  --http-host="$ETH0_IP" >/dev/null 2>&1 &
+
+  sleep 10
+else
+  "$FLARE_HOME"/scripts/launch_localnet.sh
+fi
+
+runall </dev/null >/dev/null 2>&1

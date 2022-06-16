@@ -1,0 +1,18 @@
+version: '3'
+services:
+  flarelinux:
+    container_name: my_flare_server
+    image: localhost:5000/flarelinux:1.0.0
+    restart: always
+    environment:
+      - FLARE_BIND_ADDRESS=0.0.0.0
+    ports:
+      - 9650:9650
+      - 9651:9651
+      - 9652:9652
+      - 9654:9654
+      - 9656:9656
+    volumes:
+      - ${PWD}/:/srv/flarelinux
+    build: ./flarelinux-image
+    command: flare --coston
