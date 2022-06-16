@@ -1,4 +1,4 @@
-# [![Flare Linux Banner](tools/logo.png)](https://flarelinux.xyz/)
+# [![Flare Linux Banner](data/logo.png)](https://flarelinux.xyz/)
 # Flare Linux Docker Images
 
 The Official Flare Linux Repository.
