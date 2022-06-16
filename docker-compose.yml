@@ -4,6 +4,8 @@ services:
     container_name: my_flare_server
     image: localhost:5000/flarelinux:1.0.0
     restart: always
+    environment:
+      - FLARE_BIND_ADDRESS=0.0.0.0
     ports:
       - 9650:9650
       - 9651:9651

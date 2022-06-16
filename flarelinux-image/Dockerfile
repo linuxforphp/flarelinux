@@ -1,4 +1,4 @@
-FROM asclinux/linuxforphp:8.2
+FROM asclinux/linuxforphp-8.2-ultimate:src
 
 MAINTAINER Andrew Caya <andrewscaya@yahoo.ca>
 
@@ -8,40 +8,56 @@ WORKDIR /root
 
 # bind-utils setup
 RUN lfphp-get bind-utils
-RUN cd && rm libuv-v1.38.1-lfphp.tar.gz krb5-1.17-lfphp.tar.gz bind-9.16.5-lfphp.tar.gz
 
 # Node 10.24.1 setup
 RUN lfphp-get --force node.js-10
 RUN npm install --global yarn
-RUN cd && rm which-2.21-lfphp.tar.gz node-v10.24.1-linux-x64.tar.xz
 
-# Golang setup
+# Golang 1.16.8 setup
 RUN lfphp-get golang
-RUN cd && rm go1.15.5.linux-amd64-lfphp.tar.gz
 
 # jq setup
 RUN lfphp-get jq
-RUN cd && rm jq-1.6-137-x64-lfphp.tar.gz
 
 # libtirpc and lsof setup
 RUN lfphp-get lsof
-RUN cd && rm libtirpc-1.3.1-lfphp.tar.gz lsof_4.91_src-lfphp.tar.gz
+
+# gflags, libsnappy, LevelDB, and RocksDB setup
+RUN lfphp-get rocksdb
+
+# Fcron setup
+RUN rm -rf /services/*
+RUN lfphp-get fcron
+
+# Clean up
+RUN cd && rm -rf *.tar.gz && rm -rf *.tar.xz
 
 # Flare Network setup
 RUN groupadd flare && useradd -g flare flareuser && cp -rf /etc/skel /home/flareuser && chown -R flareuser:flare /home/flareuser && echo "flareuser:flarepass" | chpasswd
 RUN sed -i 's/GOPATH=\/root\/go/GOPATH=\/home\/go/' /etc/bashrc
 RUN mv /root/go /home
-RUN echo 'export XRP_APIs="https://xrpl.flare.network:443,https://xrpl-1.flare.network:443,https://xrplcluster.com"' >> /etc/bashrc
-RUN cd /home && git clone https://gitlab.com/flarenetwork/flare
-# Checking out last successful build of Coreth (Go module) - CURRENT HEAD is 451710b663bc0ad227463d27c384034fba755e03 (Songbird)
-RUN export GOGC=90 && cd /home/flare && git checkout a1f141b4562c74fb49e75d3ff91f233deb77c1f0 && source /etc/bashrc && sed -i 's/sudo //g' /home/flare/compile.sh && sed -i 's/sudo //g' /home/flare/src/avalanchego/build_coreth.sh && /home/flare/compile.sh songbird && chown -R flareuser:flare /home/go && chmod -R 775 /home/go && chown -R flareuser:flare /home/flare
+RUN cd /home/flareuser && mkdir bin && mkdir log && touch /home/flareuser/log/check.log
+RUN cd /home/flareuser && git clone https://github.com/flare-foundation/flare.git
 
+# Checking out lastest version - CURRENT HEAD is v0.6.1
+RUN cd /home/flareuser/flare && git checkout v0.6.1 && source /etc/bashrc && ./scripts/build.sh && chown -R flareuser:flare /home/go && chmod -R 775 /home/go && chown -R flareuser:flare /home/flareuser
+
+# Copy core files
 COPY ./flare /usr/bin
+COPY ./cronup /usr/bin
+COPY ./crondown /usr/bin
+COPY ./sgbcheck.js /home/flareuser/bin
+COPY ./sgbcheckcmd /home/flareuser/bin
+COPY ./sgbchecklogcmd /home/flareuser/bin
+
+# Set up crons
+RUN echo "#*/10 * * * * flareuser bash --login -c '/home/flareuser/bin/sgbcheckcmd > /home/flareuser/log/check.log 2>&1'" >> /etc/fcrontab
+RUN echo "#*/2 * * * * flareuser bash --login -c '/home/flareuser/bin/sgbchecklogcmd > /home/flareuser/log/checklog.log 2>&1'" >> /etc/fcrontab
 
 # Change root password
 RUN echo "root:toor" | chpasswd
 
-WORKDIR /home/flare
+WORKDIR /home/flareuser/flare
 
 USER flareuser
 
