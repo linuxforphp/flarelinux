@@ -39,8 +39,8 @@ RUN mv /root/go /home
 RUN cd /home/flareuser && mkdir bin && mkdir log && touch /home/flareuser/log/check.log
 RUN cd /home/flareuser && git clone https://github.com/flare-foundation/flare.git
 
-# Checking out lastest version - CURRENT HEAD is v0.6.1
-RUN cd /home/flareuser/flare && git checkout v0.6.1 && source /etc/bashrc && ./scripts/build.sh && chown -R flareuser:flare /home/go && chmod -R 775 /home/go && chown -R flareuser:flare /home/flareuser
+# Checking out lastest version - CURRENT HEAD is v0.6.2
+RUN cd /home/flareuser/flare && git checkout v0.6.2 && source /etc/bashrc && ./scripts/build.sh && chown -R flareuser:flare /home/go && chmod -R 775 /home/go && chown -R flareuser:flare /home/flareuser
 
 # Copy core files
 COPY ./flare /usr/bin
