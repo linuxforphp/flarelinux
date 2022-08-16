@@ -1,4 +1,4 @@
-# [![Flare Linux Banner](tools/logo.png)](https://flarelinux.xyz/)
+# [![Flare Linux Banner](data/logo.png)](https://flarelinux.xyz/)
 # Flare Linux Docker Images
 
 The Official Flare Linux Repository.
@@ -68,7 +68,7 @@ you can also start testing the new image manually. To start a container only,
 run the following command:
 
 ```
-docker run -it --rm -e FLARE_BIND_ADDRESS=0.0.0.0 -p 9650:9650 -p 9651:9651 --name my_flare_server localhost:5000/flarelinux:1.0.0 flare
+docker run -it --rm -e FLARE_BIND_ADDRESS=0.0.0.0 -p 9650:9650 -p 9651:9651 --name my_flare_server localhost:5000/flarelinux:1.0.1 flare
 ```
 
 You can stop the container by typing the `Ctrl+C` keys on your keyboard, or by stopping the Docker container with the `docker stop my_flare_server` command.
