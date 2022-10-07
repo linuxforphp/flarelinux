@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.0 (2022-10-06)
+
+- Adds the Flare Validator node v.0.7.0.
+
 ## 1.0.1 (2022-08-16)
 
 - Updates the SGB node server to v.0.6.2.
