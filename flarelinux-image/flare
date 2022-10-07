@@ -44,8 +44,8 @@ if [[ "$1" == "--flare-observer" || "$1" == "--flare-validator" || "$1" == "--fl
     exit 3
   fi
 
-  echo "export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go-1.18.5/bin" >> $HOME/.bashrc
-  echo "export GOPATH=/home/go-1.18.5" >> $HOME/.bashrc
+  sed -i 's#/usr/local/go#/usr/local/go-1.18.5#' $HOME/.bashrc
+  sed -i 's#/home/go#/home/go-1.18.5#' $HOME/.bashrc
   source $HOME/.bashrc
 fi
 
@@ -62,8 +62,8 @@ if [[ "$1" == "--songbird-validator" || "$1" == "--flare-coston1" ]]; then
     exit 3
   fi
 
-  echo "export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go-1.18.5/bin" >> $HOME/.bashrc
-  echo "export GOPATH=/home/go-1.18.5" >> $HOME/.bashrc
+  sed -i 's#/usr/local/go#/usr/local/go-1.18.5#' $HOME/.bashrc
+  sed -i 's#/home/go#/home/go-1.18.5#' $HOME/.bashrc
   source $HOME/.bashrc
 fi
 

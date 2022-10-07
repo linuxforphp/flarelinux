@@ -60,6 +60,10 @@ COPY ./sgbchecklogcmd /home/flareuser/bin
 RUN echo "#*/10 * * * * flareuser bash --login -c '/home/flareuser/bin/sgbcheckcmd > /home/flareuser/log/check.log 2>&1'" >> /etc/fcrontab
 RUN echo "#*/2 * * * * flareuser bash --login -c '/home/flareuser/bin/sgbchecklogcmd > /home/flareuser/log/checklog.log 2>&1'" >> /etc/fcrontab
 
+# Set up flareuser bashrc
+RUN echo "export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go/bin" >> /home/flareuser/.bashrc
+RUN echo "export GOPATH=/home/go" >> /home/flareuser/.bashrc
+
 # Change root password
 RUN echo "root:toor" | chpasswd
 
