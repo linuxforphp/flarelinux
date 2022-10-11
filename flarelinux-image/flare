@@ -4,31 +4,35 @@ source /etc/bashrc
 #export ROCKSDBALLOWED=1
 
 if [[ "$1" == "--coston" || "$1" == "--songbird" ]]; then
-  export FLARE_HOME="/home/flareuser/flare"
+  export FLARE_HOME="/home/flareuser/go-songbird"
   export FLARE_BIND_ADDRESS="${FLARE_BIND_ADDRESS:-0.0.0.0}"
 
   cd $FLARE_HOME || exit 2
 
-  if [[ -d "build" && -f "$FLARE_HOME"/build/flare ]]; then
-    export FLARE_BIN_PREFIX=/build
-    export FLARE_BIN="$FLARE_HOME""$FLARE_BIN_PREFIX"/flare
+  if [[ -d "avalanchego" ]]; then
+    export FLARE_BIN_PREFIX=/avalanchego
+    export FLARE_BIN="$FLARE_HOME""$FLARE_BIN_PREFIX"/build/flare
   else
     exit 3
   fi
 fi
 
-if [[ "$1" == "--local" ]]; then
-  export FLARE_HOME="/home/flareuser/flare"
-  export FLARE_BIND_ADDRESS="${FLARE_BIND_ADDRESS:-127.0.0.1}"
+if [[ "$1" == "--songbird-validator" || "$1" == "--flare-coston1" ]]; then
+  export FLARE_HOME="/home/flareuser/go-flare"
+  export FLARE_BIND_ADDRESS="${FLARE_BIND_ADDRESS:-0.0.0.0}"
 
   cd $FLARE_HOME || exit 2
 
-  if [[ -d "build" && -f "$FLARE_HOME"/build/flare ]]; then
-    export FLARE_BIN_PREFIX=/build
-    export FLARE_BIN="$FLARE_HOME""$FLARE_BIN_PREFIX"/flare
+  if [[ -d "avalanchego" ]]; then
+    export FLARE_BIN_PREFIX=/avalanchego
+    export FLARE_BIN="$FLARE_HOME""$FLARE_BIN_PREFIX"/build/flare
   else
     exit 3
   fi
+
+  sed -i 's#/usr/local/go/bin#/usr/local/go-1.18.5/bin#' $HOME/.bashrc
+  sed -i 's#/home/go$#/home/go-1.18.5#' $HOME/.bashrc
+  source $HOME/.bashrc
 fi
 
 if [[ "$1" == "--flare-observer" || "$1" == "--flare-validator" || "$1" == "--flare-coston2" ]]; then
@@ -44,27 +48,16 @@ if [[ "$1" == "--flare-observer" || "$1" == "--flare-validator" || "$1" == "--fl
     exit 3
   fi
 
-  echo "export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go-1.18.5/bin" >> $HOME/.bashrc
-  echo "export GOPATH=/home/go-1.18.5" >> $HOME/.bashrc
+  sed -i 's#/usr/local/go/bin#/usr/local/go-1.18.5/bin#' $HOME/.bashrc
+  sed -i 's#/home/go$#/home/go-1.18.5#' $HOME/.bashrc
   source $HOME/.bashrc
 fi
 
-if [[ "$1" == "--songbird-validator" || "$1" == "--flare-coston1" ]]; then
-  export FLARE_HOME="/home/flareuser/go-flare"
+if [[ "$1" == "--local" ]]; then
+  export FLARE_HOME="/home/flareuser/go-songbird/avalanchego"
   export FLARE_BIND_ADDRESS="${FLARE_BIND_ADDRESS:-0.0.0.0}"
 
   cd $FLARE_HOME || exit 2
-
-  if [[ -d "avalanchego" && -f "$FLARE_HOME"/build/flare ]]; then
-    export FLARE_BIN_PREFIX=/avalanchego
-    export FLARE_BIN="$FLARE_HOME""$FLARE_BIN_PREFIX"/build/flare
-  else
-    exit 3
-  fi
-
-  echo "export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go-1.18.5/bin" >> $HOME/.bashrc
-  echo "export GOPATH=/home/go-1.18.5" >> $HOME/.bashrc
-  source $HOME/.bashrc
 fi
 
 if [[ -n "$FLARE_BIND_ADDRESS" ]]; then
@@ -86,19 +79,20 @@ elif [[ "$1" == "--songbird" ]]; then
 
   sleep 10
 elif [[ "$1" == "--flare-observer" || "$1" == "--flare-validator" ]]; then
-    "$FLARE_BIN" --data-dir=/home/flareuser/.flare --network-id=flare --http-host= \
-    --bootstrap-ips="$(curl -m 10 -sX POST \
-      --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeIP" }' \
-      -H 'content-type:application/json;' https://flare.flare.network/ext/info \
-      | jq -r ".result.ip")" \
-    --bootstrap-ids="$(curl -m 10 -sX POST \
-      --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' \
-      -H 'content-type:application/json;' https://flare.flare.network/ext/info \
-      | jq -r ".result.nodeID")" >/dev/null 2>&1 &
+  "$FLARE_BIN" --data-dir=/home/flareuser/.flare --network-id=flare \
+  --bootstrap-ips="$(curl -m 10 -sX POST \
+    --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeIP" }' \
+    -H 'content-type:application/json;' https://flare.flare.network/ext/info \
+    | jq -r ".result.ip")" \
+  --bootstrap-ids="$(curl -m 10 -sX POST \
+    --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' \
+    -H 'content-type:application/json;' https://flare.flare.network/ext/info \
+    | jq -r ".result.nodeID")" \
+    --http-host="$ETH0_IP" >/dev/null 2>&1 &
 
   sleep 10
 elif [[ "$1" == "--flare-coston1" ]]; then
-  "$FLARE_BIN" --data-dir=/home/flareuser/.flare --network-id=coston --http-host= \
+  "$FLARE_BIN" --data-dir=/home/flareuser/.flare --network-id=coston \
   --bootstrap-ips="$(curl -m 10 -sX POST \
     --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeIP" }' \
     -H 'content-type:application/json;' https://coston.flare.network/ext/info \
@@ -106,11 +100,12 @@ elif [[ "$1" == "--flare-coston1" ]]; then
   --bootstrap-ids="$(curl -m 10 -sX POST \
     --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' \
     -H 'content-type:application/json;' https://coston.flare.network/ext/info \
-    | jq -r ".result.nodeID")" >/dev/null 2>&1 &
+    | jq -r ".result.nodeID")" \
+    --http-host="$ETH0_IP" >/dev/null 2>&1 &
 
   sleep 10
 elif [[ "$1" == "--flare-coston2" ]]; then
-  "$FLARE_BIN" --data-dir=/home/flareuser/.flare --network-id=costwo --http-host= \
+  "$FLARE_BIN" --data-dir=/home/flareuser/.flare --network-id=costwo \
   --bootstrap-ips="$(curl -m 10 -sX POST \
     --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeIP" }' \
     -H 'content-type:application/json;' https://coston2.flare.network/ext/info \
@@ -118,11 +113,12 @@ elif [[ "$1" == "--flare-coston2" ]]; then
   --bootstrap-ids="$(curl -m 10 -sX POST \
     --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' \
     -H 'content-type:application/json;' https://coston2.flare.network/ext/info \
-    | jq -r ".result.nodeID")" >/dev/null 2>&1 &
+    | jq -r ".result.nodeID")" \
+    --http-host="$ETH0_IP" >/dev/null 2>&1 &
 
   sleep 10
 elif [[ "$1" == "--songbird-validator" ]]; then
-  "$FLARE_BIN" --data-dir=/home/flareuser/.flare --network-id=songbird --http-host= \
+  "$FLARE_BIN" --data-dir=/home/flareuser/.flare --network-id=songbird \
   --bootstrap-ips="$(curl -m 10 -sX POST \
     --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeIP" }' \
     -H 'content-type:application/json;' https://songbird.flare.network/ext/info \
@@ -130,7 +126,8 @@ elif [[ "$1" == "--songbird-validator" ]]; then
   --bootstrap-ids="$(curl -m 10 -sX POST \
     --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' \
     -H 'content-type:application/json;' https://songbird.flare.network/ext/info \
-    | jq -r ".result.nodeID")" >/dev/null 2>&1 &
+    | jq -r ".result.nodeID")" \
+    --http-host="$ETH0_IP" >/dev/null 2>&1 &
 
   sleep 10
 else
