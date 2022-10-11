@@ -39,11 +39,11 @@ RUN groupadd flare && useradd -g flare flareuser && cp -rf /etc/skel /home/flare
 RUN sed -i 's/GOPATH=\/root\/go/GOPATH=\/home\/go/' /etc/bashrc
 RUN mv /root/go /home/go-1.16.8 && ln -s /home/go-1.16.8 /home/go && mkdir -p /home/go-1.18.5
 RUN cd /home/flareuser && mkdir bin && mkdir log && touch /home/flareuser/log/check.log
-RUN cd /home/flareuser && git clone https://github.com/flare-foundation/flare.git
+RUN cd /home/flareuser && git clone https://github.com/flare-foundation/go-songbird.git
 RUN cd /home/flareuser && git clone https://github.com/flare-foundation/go-flare.git
 
-# Checking out lastest version - CURRENT HEAD is v0.6.2
-RUN cd /home/flareuser/flare && git checkout v0.6.2 && source /etc/bashrc && ./scripts/build.sh && chown -R flareuser:flare /home/go && chmod -R 775 /home/go && chown -R flareuser:flare /home/flareuser
+# Checking out lastest version of go-songbird - CURRENT HEAD is v0.6.4
+RUN cd /home/flareuser/go-songbird && git checkout v0.6.4 && source /etc/bashrc && cd avalanchego && ./scripts/build.sh && chown -R flareuser:flare /home/go && chmod -R 775 /home/go && chown -R flareuser:flare /home/flareuser && ln -s /home/flareuser/go-songbird /home/flareuser/flare
 
 # Checking out lastest version of go-flare - CURRENT HEAD is v0.7.0
 RUN cd /home/flareuser/go-flare && git checkout v0.7.0 && rm /usr/local/go && ln -s /usr/local/go-1.18.5 /usr/local/go && rm /home/go && ln -s /home/go-1.18.5 /home/go && source /etc/bashrc && cd avalanchego && ./scripts/build.sh && chown -R flareuser:flare /home/go && chmod -R 775 /home/go && chown -R flareuser:flare /home/flareuser && rm /usr/local/go && ln -s /usr/local/go-1.16.8 /usr/local/go && rm /home/go && ln -s /home/go-1.16.8 /home/go
