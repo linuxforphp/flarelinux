@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.2 (2022-10-31)
+
+- Updates the FLR node server to v.0.7.1.
+
 ## 1.1.1 (2022-10-11)
 
 - Updates the SGB node server to v.0.6.4.
