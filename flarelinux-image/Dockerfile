@@ -45,8 +45,8 @@ RUN cd /home/flareuser && git clone https://github.com/flare-foundation/go-flare
 # Checking out lastest version of go-songbird - CURRENT HEAD is v0.6.4
 RUN cd /home/flareuser/go-songbird && git checkout v0.6.4 && source /etc/bashrc && cd avalanchego && ./scripts/build.sh && chown -R flareuser:flare /home/go && chmod -R 775 /home/go && chown -R flareuser:flare /home/flareuser && ln -s /home/flareuser/go-songbird /home/flareuser/flare
 
-# Checking out lastest version of go-flare - CURRENT HEAD is v0.7.0
-RUN cd /home/flareuser/go-flare && git checkout v0.7.0 && rm /usr/local/go && ln -s /usr/local/go-1.18.5 /usr/local/go && rm /home/go && ln -s /home/go-1.18.5 /home/go && source /etc/bashrc && cd avalanchego && ./scripts/build.sh && chown -R flareuser:flare /home/go && chmod -R 775 /home/go && chown -R flareuser:flare /home/flareuser && rm /usr/local/go && ln -s /usr/local/go-1.16.8 /usr/local/go && rm /home/go && ln -s /home/go-1.16.8 /home/go
+# Checking out lastest version of go-flare - CURRENT HEAD is v0.7.1
+RUN cd /home/flareuser/go-flare && git checkout v0.7.1 && rm /usr/local/go && ln -s /usr/local/go-1.18.5 /usr/local/go && rm /home/go && ln -s /home/go-1.18.5 /home/go && source /etc/bashrc && cd avalanchego && ./scripts/build.sh && chown -R flareuser:flare /home/go && chmod -R 775 /home/go && chown -R flareuser:flare /home/flareuser && rm /usr/local/go && ln -s /usr/local/go-1.16.8 /usr/local/go && rm /home/go && ln -s /home/go-1.16.8 /home/go
 
 # Copy core files
 COPY ./flare /usr/bin
