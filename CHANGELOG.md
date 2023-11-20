@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.2-1.7.1806 (2023-11-20)
+
+- Updates the FLR node server to v.1.7.1806.
+
 ## 1.1.2 (2022-10-31)
 
 - Updates the FLR node server to v.0.7.1.

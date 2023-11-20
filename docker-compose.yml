@@ -2,7 +2,7 @@ version: '3'
 services:
   flarelinux:
     container_name: my_flare_server
-    image: localhost:5000/flarelinux:1.1.2
+    image: localhost:5000/flarelinux:1.1.2-1.7.1806
     restart: always
     environment:
       - FLARE_BIND_ADDRESS=0.0.0.0
@@ -15,4 +15,4 @@ services:
     volumes:
       - ${PWD}/:/srv/flarelinux
     build: ./flarelinux-image
-    command: flare --coston
+    command: flare --flare-coston2
