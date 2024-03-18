@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.1.2-1.7.1807-0.6.5 (2024-03-18)
+
+- Updates the FLR node server to v.1.7.1807.
+- Updates the SGB node server to v.0.6.5.
+
 ## 1.1.2-1.7.1806 (2023-11-20)
 
 - Updates the FLR node server to v.1.7.1806.

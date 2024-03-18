@@ -42,11 +42,11 @@ RUN cd /home/flareuser && mkdir bin && mkdir log && touch /home/flareuser/log/ch
 RUN cd /home/flareuser && git clone https://github.com/flare-foundation/go-songbird.git
 RUN cd /home/flareuser && git clone https://github.com/flare-foundation/go-flare.git
 
-# Checking out lastest version of go-songbird - CURRENT HEAD is v0.6.4
-RUN cd /home/flareuser/go-songbird && git checkout v0.6.4 && source /etc/bashrc && cd avalanchego && ./scripts/build.sh && chown -R flareuser:flare /home/go && chmod -R 775 /home/go && chown -R flareuser:flare /home/flareuser && ln -s /home/flareuser/go-songbird /home/flareuser/flare
+# Checking out lastest version of go-songbird - CURRENT HEAD is v0.6.5
+RUN cd /home/flareuser/go-songbird && git checkout v0.6.5 && source /etc/bashrc && cd avalanchego && ./scripts/build.sh && chown -R flareuser:flare /home/go && chmod -R 775 /home/go && chown -R flareuser:flare /home/flareuser && ln -s /home/flareuser/go-songbird /home/flareuser/flare
 
-# Checking out lastest version of go-flare - CURRENT HEAD is v1.7.1806
-RUN cd /home/flareuser/go-flare && git checkout v1.7.1806 && rm /usr/local/go && ln -s /usr/local/go-1.18.5 /usr/local/go && rm /home/go && ln -s /home/go-1.18.5 /home/go && source /etc/bashrc && cd avalanchego && ./scripts/build.sh && chown -R flareuser:flare /home/go && chmod -R 775 /home/go && chown -R flareuser:flare /home/flareuser && rm /usr/local/go && ln -s /usr/local/go-1.16.8 /usr/local/go && rm /home/go && ln -s /home/go-1.16.8 /home/go
+# Checking out lastest version of go-flare - CURRENT HEAD is v1.7.1807
+RUN cd /home/flareuser/go-flare && git checkout v1.7.1807 && rm /usr/local/go && ln -s /usr/local/go-1.18.5 /usr/local/go && rm /home/go && ln -s /home/go-1.18.5 /home/go && source /etc/bashrc && cd avalanchego && ./scripts/build.sh && chown -R flareuser:flare /home/go && chmod -R 775 /home/go && chown -R flareuser:flare /home/flareuser && rm /usr/local/go && ln -s /usr/local/go-1.16.8 /usr/local/go && rm /home/go && ln -s /home/go-1.16.8 /home/go
 
 # Copy core files
 COPY ./flare /usr/bin
