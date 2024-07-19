@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.3-1.7.1807-0.6.6 (2024-07-19)
+
+- Updates the Coston/Coston2/FLR node server to v0.6.6-coston.
+
 ## 1.1.2-1.7.1807-0.6.5 (2024-03-18)
 
 - Updates the FLR node server to v.1.7.1807.
