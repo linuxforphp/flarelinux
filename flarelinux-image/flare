@@ -3,7 +3,7 @@ source /etc/bashrc
 
 #export ROCKSDBALLOWED=1
 
-if [[ "$1" == "--coston" || "$1" == "--songbird" || "$1" == "--songbird-validator" || "$1" == "--flare-coston1" ]]; then
+if [[ "$1" == "--songbird" || "$1" == "--songbird-validator" ]]; then
   export FLARE_HOME="/home/flareuser/go-songbird"
   export FLARE_BIND_ADDRESS="${FLARE_BIND_ADDRESS:-0.0.0.0}"
 
@@ -17,7 +17,7 @@ if [[ "$1" == "--coston" || "$1" == "--songbird" || "$1" == "--songbird-validato
   fi
 fi
 
-if [[ "$1" == "--flare-observer" || "$1" == "--flare-validator" || "$1" == "--flare-coston2" ]]; then
+if [[ "$1" == "--coston" || "$1" == "--flare-coston1" || "$1" == "--flare-observer" || "$1" == "--flare-validator" || "$1" == "--flare-coston2" ]]; then
   export FLARE_HOME="/home/flareuser/go-flare"
   export FLARE_BIND_ADDRESS="${FLARE_BIND_ADDRESS:-0.0.0.0}"
 
@@ -30,8 +30,8 @@ if [[ "$1" == "--flare-observer" || "$1" == "--flare-validator" || "$1" == "--fl
     exit 3
   fi
 
-  sed -i 's#/usr/local/go/bin#/usr/local/go-1.18.5/bin#' $HOME/.bashrc
-  sed -i 's#/home/go$#/home/go-1.18.5#' $HOME/.bashrc
+  sed -i 's#/usr/local/go/bin#/usr/local/go-1.21.8/bin#' $HOME/.bashrc
+  sed -i 's#/home/go$#/home/go-1.21.8#' $HOME/.bashrc
   source $HOME/.bashrc
 fi
 
@@ -49,7 +49,7 @@ else
 fi
 
 if [[ "$1" == "--coston" || "$1" == "--flare-coston1" ]]; then
-  "$FLARE_BIN" --network-id=coston \
+  "$FLARE_BIN" --data-dir=/home/flareuser/.flare --network-id=coston \
     --bootstrap-ips="$( curl -m 10 -sX POST --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeIP" }' -H 'content-type:application/json;' https://coston.flare.network/ext/info | jq -r ".result.ip" )" \
     --bootstrap-ids="$( curl -m 10 -sX POST --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' -H 'content-type:application/json;' https://coston.flare.network/ext/info | jq -r ".result.nodeID" )" \
     --http-host="$ETH0_IP" >/dev/null 2>&1 &
