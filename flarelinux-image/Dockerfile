@@ -40,7 +40,7 @@ RUN groupadd flare && useradd -g flare flareuser && cp -rf /etc/skel /home/flare
 RUN sed -i 's/GOPATH=\/root\/go/GOPATH=\/home\/go/' /etc/bashrc
 RUN mv /root/go /home/go-1.16.8 && ln -s /home/go-1.16.8 /home/go && mkdir -p /home/go-1.18.5 && mkdir -p /home/go-1.21.8
 RUN cd /home/flareuser && mkdir bin && mkdir log && touch /home/flareuser/log/check.log
-RUN cd /home/flareuser && git clone https://github.com/flare-foundation/go-songbird.git
+#RUN cd /home/flareuser && git clone https://github.com/flare-foundation/go-songbird.git
 RUN cd /home/flareuser && git clone https://github.com/flare-foundation/go-flare.git
 
 # Checking out lastest version of go-songbird - CURRENT HEAD is v0.6.5
