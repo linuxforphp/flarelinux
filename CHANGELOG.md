@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.5-1.9.0-0.7.0 (2024-11-18)
+
+- Updates the Coston/Coston2/SGB/FLR node server to v1.9.0/v0.7.0.
+
 ## 1.1.4-1.7.1807-0.6.6 (2024-09-27)
 
 - Updates the Coston/Coston2/SGB/FLR node server to v0.6.6-songbird.
