@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.6-1.10.0 (2025-04-16)
+
+- Updates the Coston/Coston2/SGB/FLR node server to v1.10.0.
+
 ## 1.1.6-1.9.1 (2024-12-03)
 
 - Updates the Coston/Coston2/SGB/FLR node server to v1.9.1.
