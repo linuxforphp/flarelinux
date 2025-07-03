@@ -21,8 +21,16 @@ if [[ "$1" == "--local" || "$1" == "--coston" || "$1" == "--flare-coston1" || "$
   source $HOME/.bashrc
 fi
 
+if [[ -z "$FLARE_ALLOWED_HOSTS" ]]; then
+  export FLARE_ALLOWED_HOSTS="localhost"
+fi
+
 if [[ -n "$FLARE_BIND_ADDRESS" ]]; then
   export ETH0_IP="$FLARE_BIND_ADDRESS"
+
+  if [[ "$FLARE_BIND_ADDRESS" == "0.0.0.0" ]]; then
+    export FLARE_ALLOWED_HOSTS="*"
+  fi
 else
   export ETH0_IP="$( ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1 )"
 fi
@@ -37,6 +45,7 @@ if [[ "$1" == "--coston" || "$1" == "--flare-coston1" ]]; then
       --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' \
       -H 'content-type:application/json;' https://coston.flare.network/ext/info \
       | jq -r ".result.nodeID" )" \
+    --http-allowed-hosts="$FLARE_ALLOWED_HOSTS" \
     --http-host="$ETH0_IP" >/dev/null 2>&1 &
 elif [[ "$1" == "--songbird" || "$1" == "--songbird-validator" ]]; then
   "$FLARE_BIN" --data-dir=/home/flareuser/.flare --network-id=songbird \
@@ -48,6 +57,7 @@ elif [[ "$1" == "--songbird" || "$1" == "--songbird-validator" ]]; then
     --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' \
     -H 'content-type:application/json;' https://songbird.flare.network/ext/info \
     | jq -r ".result.nodeID" )" \
+  --http-allowed-hosts="$FLARE_ALLOWED_HOSTS" \
   --http-host="$ETH0_IP" >/dev/null 2>&1 &
 
   sleep 10
@@ -61,6 +71,7 @@ elif [[ "$1" == "--flare-observer" || "$1" == "--flare-validator" ]]; then
     --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' \
     -H 'content-type:application/json;' https://flare.flare.network/ext/info \
     | jq -r ".result.nodeID")" \
+  --http-allowed-hosts="$FLARE_ALLOWED_HOSTS" \
   --http-host="$ETH0_IP" >/dev/null 2>&1 &
 
   sleep 10
@@ -74,7 +85,8 @@ else
     --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' \
     -H 'content-type:application/json;' https://coston2.flare.network/ext/info \
     | jq -r ".result.nodeID")" \
-    --http-host="$ETH0_IP" >/dev/null 2>&1 &
+  --http-allowed-hosts="$FLARE_ALLOWED_HOSTS" \
+  --http-host="$ETH0_IP" >/dev/null 2>&1 &
 
   sleep 10
 fi

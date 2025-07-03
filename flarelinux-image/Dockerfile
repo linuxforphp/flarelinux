@@ -42,8 +42,8 @@ RUN mv /root/go /home/go-1.16.8 && ln -s /home/go-1.16.8 /home/go && mkdir -p /h
 RUN cd /home/flareuser && mkdir bin && mkdir log && touch /home/flareuser/log/check.log
 RUN cd /home/flareuser && git clone https://github.com/flare-foundation/go-flare.git
 
-# Checking out lastest version of go-flare - CURRENT HEAD is v1.10.0.
-RUN cd /home/flareuser/go-flare && git checkout v1.10.0 && rm /usr/local/go && ln -s /usr/local/go-1.21.8 /usr/local/go && rm /home/go && ln -s /home/go-1.21.8 /home/go && source /etc/bashrc && cd avalanchego && ./scripts/build.sh && chown -R flareuser:flare /home/go && chmod -R 775 /home/go && chown -R flareuser:flare /home/flareuser && rm /usr/local/go && ln -s /usr/local/go-1.16.8 /usr/local/go && rm /home/go && ln -s /home/go-1.16.8 /home/go
+# Checking out lastest version of go-flare - CURRENT HEAD is v1.11.0.
+RUN cd /home/flareuser/go-flare && git checkout v1.11.0 && rm /usr/local/go && ln -s /usr/local/go-1.21.8 /usr/local/go && rm /home/go && ln -s /home/go-1.21.8 /home/go && source /etc/bashrc && cd avalanchego && ./scripts/build.sh && chown -R flareuser:flare /home/go && chmod -R 775 /home/go && chown -R flareuser:flare /home/flareuser && rm /usr/local/go && ln -s /usr/local/go-1.16.8 /usr/local/go && rm /home/go && ln -s /home/go-1.16.8 /home/go
 
 # Copy core files
 COPY ./flare /usr/bin

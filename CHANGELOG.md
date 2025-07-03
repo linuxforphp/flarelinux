@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.1.6-1.11.0 (2025-07-03)
+
+- Updates the Coston/Coston2/SGB/FLR node server to v1.11.0.
+- Adds the new 'http-allowed-hosts' option.
+
 ## 1.1.6-1.10.0 (2025-04-16)
 
 - Updates the Coston/Coston2/SGB/FLR node server to v1.10.0.
