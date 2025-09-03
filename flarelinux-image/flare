@@ -3,9 +3,40 @@ source /etc/bashrc
 
 #export ROCKSDBALLOWED=1
 
+get_bootstrap_ips() {
+  result="$( curl -m 10 -sX POST \
+    --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeIP" }' \
+    -H 'content-type:application/json' "${FLARE_RPC_URL}" \
+    | jq -r ".result.ip" )"
+
+  echo "$result"
+}
+
+get_bootstrap_ids() {
+  result="$( curl -m 10 -sX POST \
+    --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' \
+    -H 'content-type:application/json' "${FLARE_RPC_URL}" \
+    | jq -r ".result.nodeID" )"
+
+  echo "$result"
+}
+
+if [[ "$1" == "--coston" || "$1" == "--flare-coston1" ]]; then
+  export FLARE_NETWORK_ID="coston"
+  export FLARE_RPC_URL="https://coston.flare.network/ext/info"
+elif [[ "$1" == "--songbird" || "$1" == "--songbird-validator" ]]; then
+  export FLARE_NETWORK_ID="songbird"
+  export FLARE_RPC_URL="https://songbird.flare.network/ext/info"
+elif [[ "$1" == "--flare-observer" || "$1" == "--flare-validator" ]]; then
+  export FLARE_NETWORK_ID="flare"
+  export FLARE_RPC_URL="https://flare.flare.network/ext/info"
+else
+  export FLARE_NETWORK_ID="costwo"
+  export FLARE_RPC_URL="https://coston2.flare.network/ext/info"
+fi
+
 if [[ "$1" == "--local" || "$1" == "--coston" || "$1" == "--flare-coston1" || "$1" == "--songbird" || "$1" == "--songbird-validator" || "$1" == "--flare-observer" || "$1" == "--flare-validator" || "$1" == "--flare-coston2" ]]; then
   export FLARE_HOME="/home/flareuser/go-flare"
-  export FLARE_BIND_ADDRESS="${FLARE_BIND_ADDRESS:-0.0.0.0}"
 
   cd $FLARE_HOME || exit 2
 
@@ -19,10 +50,43 @@ if [[ "$1" == "--local" || "$1" == "--coston" || "$1" == "--flare-coston1" || "$
   sed -i 's#/usr/local/go/bin#/usr/local/go-1.21.8/bin#' $HOME/.bashrc
   sed -i 's#/home/go$#/home/go-1.21.8#' $HOME/.bashrc
   source $HOME/.bashrc
+else
+  echo "No network given."
+  exit 1
+fi
+
+if [[ -z "$FLARE_BOOTSTRAP_IPS" ]]; then
+  export FLARE_BOOTSTRAP_IPS="$( get_bootstrap_ips )"
+
+  if [[ -z "$FLARE_BOOTSTRAP_IPS" ]]; then
+    echo "The bootstrap IPs could not be retrieved at this time. Please try another server."
+    exit 4
+  fi
+fi
+
+if [[ -z "$FLARE_BOOTSTRAP_IDS" ]]; then
+  export FLARE_BOOTSTRAP_IDS="$( get_bootstrap_ids )"
+
+  if [[ -z "$FLARE_BOOTSTRAP_IDS" ]]; then
+    echo "The bootstrap Node IDs could not be retrieved at this time. Please try another server."
+    exit 4
+  fi
+fi
+
+if [[ -z "$FLARE_HTTP_HOST" ]]; then
+  export FLARE_HTTP_HOST="localhost"
+fi
+
+if [[ -z "$FLARE_HTTP_PORT" ]]; then
+  export FLARE_HTTP_PORT="9650"
 fi
 
 if [[ -z "$FLARE_ALLOWED_HOSTS" ]]; then
   export FLARE_ALLOWED_HOSTS="localhost"
+fi
+
+if [[ -z "$FLARE_DATA_DIR" ]]; then
+  export FLARE_DATA_DIR=/home/flareuser/.flare
 fi
 
 if [[ -n "$FLARE_BIND_ADDRESS" ]]; then
@@ -32,63 +96,35 @@ if [[ -n "$FLARE_BIND_ADDRESS" ]]; then
     export FLARE_ALLOWED_HOSTS="*"
   fi
 else
-  export ETH0_IP="$( ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1 )"
+  if [[ -n "$FLARE_HTTP_HOST" ]]; then
+    export ETH0_IP="$FLARE_HTTP_HOST"
+  else
+    export ETH0_IP="$( ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1 )"
+  fi
 fi
 
-if [[ "$1" == "--coston" || "$1" == "--flare-coston1" ]]; then
-  "$FLARE_BIN" --data-dir=/home/flareuser/.flare --network-id=coston \
-    --bootstrap-ips="$( curl -m 10 -sX POST \
-      --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeIP" }' \
-      -H 'content-type:application/json' https://coston.flare.network/ext/info \
-      | jq -r ".result.ip" )" \
-    --bootstrap-ids="$( curl -m 10 -sX POST \
-      --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' \
-      -H 'content-type:application/json' https://coston.flare.network/ext/info \
-      | jq -r ".result.nodeID" )" \
-    --http-allowed-hosts="$FLARE_ALLOWED_HOSTS" \
-    --http-host="$ETH0_IP" >/dev/null 2>&1 &
-elif [[ "$1" == "--songbird" || "$1" == "--songbird-validator" ]]; then
-  "$FLARE_BIN" --data-dir=/home/flareuser/.flare --network-id=songbird \
-  --bootstrap-ips="$( curl -m 10 -sX POST \
-    --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeIP" }' \
-    -H 'content-type:application/json' https://songbird.flare.network/ext/info \
-    | jq -r ".result.ip" )" \
-  --bootstrap-ids="$( curl -m 10 -sX POST \
-    --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' \
-    -H 'content-type:application/json' https://songbird.flare.network/ext/info \
-    | jq -r ".result.nodeID" )" \
-  --http-allowed-hosts="$FLARE_ALLOWED_HOSTS" \
-  --http-host="$ETH0_IP" >/dev/null 2>&1 &
+if [[ -z "$FLARE_PUBLIC_IP" ]]; then
+  export FLARE_PUBLIC_IP="${ETH0_IP}"
 
-  sleep 10
-elif [[ "$1" == "--flare-observer" || "$1" == "--flare-validator" ]]; then
-  "$FLARE_BIN" --data-dir=/home/flareuser/.flare --network-id=flare \
-  --bootstrap-ips="$(curl -m 10 -sX POST \
-    --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeIP" }' \
-    -H 'content-type:application/json' https://flare.flare.network/ext/info \
-    | jq -r ".result.ip")" \
-  --bootstrap-ids="$(curl -m 10 -sX POST \
-    --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' \
-    -H 'content-type:application/json' https://flare.flare.network/ext/info \
-    | jq -r ".result.nodeID")" \
-  --http-allowed-hosts="$FLARE_ALLOWED_HOSTS" \
-  --http-host="$ETH0_IP" >/dev/null 2>&1 &
+  if [[ "$FLARE_PUBLIC_IP" == "localhost" || "$FLARE_PUBLIC_IP" == "127.0.0.1" ]]; then
+    export FLARE_PUBLIC_IP=""
+  fi
 
-  sleep 10
-else
-  "$FLARE_BIN" --data-dir=/home/flareuser/.flare --network-id=costwo \
-  --bootstrap-ips="$(curl -m 10 -sX POST \
-    --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeIP" }' \
-    -H 'content-type:application/json' https://coston2.flare.network/ext/info \
-    | jq -r ".result.ip")" \
-  --bootstrap-ids="$(curl -m 10 -sX POST \
-    --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' \
-    -H 'content-type:application/json' https://coston2.flare.network/ext/info \
-    | jq -r ".result.nodeID")" \
-  --http-allowed-hosts="$FLARE_ALLOWED_HOSTS" \
-  --http-host="$ETH0_IP" >/dev/null 2>&1 &
-
-  sleep 10
+  if [[ "$FLARE_PUBLIC_IP" == "0.0.0.0" ]]; then
+    export FLARE_PUBLIC_IP=""
+  fi
 fi
+
+FLARE_ARGUMENTS="--data-dir=${FLARE_DATA_DIR} --network-id=${FLARE_NETWORK_ID} --bootstrap-ips=${FLARE_BOOTSTRAP_IPS} --bootstrap-ids=${FLARE_BOOTSTRAP_IDS} --http-allowed-hosts=${FLARE_ALLOWED_HOSTS} --http-port=${FLARE_HTTP_PORT} --http-host=${ETH0_IP}"
+
+if [[ -n "$FLARE_PUBLIC_IP" ]]; then
+  FLARE_ARGUMENTS="${FLARE_ARGUMENTS} --public-ip=${FLARE_PUBLIC_IP}"
+fi
+
+command_string="${FLARE_BIN} ${FLARE_ARGUMENTS}"
+
+eval "$command_string >/dev/null 2>&1 &"
+
+sleep 10
 
 runall </dev/null >/dev/null 2>&1
