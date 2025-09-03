@@ -39,11 +39,11 @@ if [[ "$1" == "--coston" || "$1" == "--flare-coston1" ]]; then
   "$FLARE_BIN" --data-dir=/home/flareuser/.flare --network-id=coston \
     --bootstrap-ips="$( curl -m 10 -sX POST \
       --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeIP" }' \
-      -H 'content-type:application/json;' https://coston.flare.network/ext/info \
+      -H 'content-type:application/json' https://coston.flare.network/ext/info \
       | jq -r ".result.ip" )" \
     --bootstrap-ids="$( curl -m 10 -sX POST \
       --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' \
-      -H 'content-type:application/json;' https://coston.flare.network/ext/info \
+      -H 'content-type:application/json' https://coston.flare.network/ext/info \
       | jq -r ".result.nodeID" )" \
     --http-allowed-hosts="$FLARE_ALLOWED_HOSTS" \
     --http-host="$ETH0_IP" >/dev/null 2>&1 &
@@ -51,11 +51,11 @@ elif [[ "$1" == "--songbird" || "$1" == "--songbird-validator" ]]; then
   "$FLARE_BIN" --data-dir=/home/flareuser/.flare --network-id=songbird \
   --bootstrap-ips="$( curl -m 10 -sX POST \
     --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeIP" }' \
-    -H 'content-type:application/json;' https://songbird.flare.network/ext/info \
+    -H 'content-type:application/json' https://songbird.flare.network/ext/info \
     | jq -r ".result.ip" )" \
   --bootstrap-ids="$( curl -m 10 -sX POST \
     --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' \
-    -H 'content-type:application/json;' https://songbird.flare.network/ext/info \
+    -H 'content-type:application/json' https://songbird.flare.network/ext/info \
     | jq -r ".result.nodeID" )" \
   --http-allowed-hosts="$FLARE_ALLOWED_HOSTS" \
   --http-host="$ETH0_IP" >/dev/null 2>&1 &
@@ -65,11 +65,11 @@ elif [[ "$1" == "--flare-observer" || "$1" == "--flare-validator" ]]; then
   "$FLARE_BIN" --data-dir=/home/flareuser/.flare --network-id=flare \
   --bootstrap-ips="$(curl -m 10 -sX POST \
     --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeIP" }' \
-    -H 'content-type:application/json;' https://flare.flare.network/ext/info \
+    -H 'content-type:application/json' https://flare.flare.network/ext/info \
     | jq -r ".result.ip")" \
   --bootstrap-ids="$(curl -m 10 -sX POST \
     --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' \
-    -H 'content-type:application/json;' https://flare.flare.network/ext/info \
+    -H 'content-type:application/json' https://flare.flare.network/ext/info \
     | jq -r ".result.nodeID")" \
   --http-allowed-hosts="$FLARE_ALLOWED_HOSTS" \
   --http-host="$ETH0_IP" >/dev/null 2>&1 &
@@ -79,11 +79,11 @@ else
   "$FLARE_BIN" --data-dir=/home/flareuser/.flare --network-id=costwo \
   --bootstrap-ips="$(curl -m 10 -sX POST \
     --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeIP" }' \
-    -H 'content-type:application/json;' https://coston2.flare.network/ext/info \
+    -H 'content-type:application/json' https://coston2.flare.network/ext/info \
     | jq -r ".result.ip")" \
   --bootstrap-ids="$(curl -m 10 -sX POST \
     --data '{ "jsonrpc":"2.0", "id":1, "method":"info.getNodeID" }' \
-    -H 'content-type:application/json;' https://coston2.flare.network/ext/info \
+    -H 'content-type:application/json' https://coston2.flare.network/ext/info \
     | jq -r ".result.nodeID")" \
   --http-allowed-hosts="$FLARE_ALLOWED_HOSTS" \
   --http-host="$ETH0_IP" >/dev/null 2>&1 &
