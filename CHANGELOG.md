@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.0-1.11.0 (2025-09-03)
+
+- Adds new CLI environment variables.
+
 ## 1.1.6-1.11.0 (2025-07-03)
 
 - Updates the Coston/Coston2/SGB/FLR node server to v1.11.0.
