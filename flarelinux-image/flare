@@ -47,8 +47,8 @@ if [[ "$1" == "--local" || "$1" == "--coston" || "$1" == "--flare-coston1" || "$
     exit 3
   fi
 
-  sed -i 's#/usr/local/go/bin#/usr/local/go-1.21.8/bin#' $HOME/.bashrc
-  sed -i 's#/home/go$#/home/go-1.21.8#' $HOME/.bashrc
+  sed -i 's#/usr/local/go/bin#/usr/local/go-1.22.8/bin#' $HOME/.bashrc
+  sed -i 's#/home/go$#/home/go-1.22.8#' $HOME/.bashrc
   source $HOME/.bashrc
 else
   echo "No network given."
